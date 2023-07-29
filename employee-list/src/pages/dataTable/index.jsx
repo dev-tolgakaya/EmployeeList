@@ -41,18 +41,20 @@ function DataTable() {
   }, []);
 
   const filteredEmployeeList = useMemo(() => {
-    return employeeList.slice((page - 1) * 10, page * 10);
-  }, [page]);
+    return (
+      (employeeList && employeeList.slice((page - 1) * 10, page * 10)) || []
+    );
+  }, [page, employeeList]);
 
   const handlePagination = (page) => {
-   setPage(page);
+    setPage(page);
   };
 
   return (
     <Box mt={2} p={2} component={Paper}>
       <DataGrid
         className={"uikit-datagrid"}
-        rows={filteredEmployeeList || []}
+        rows={filteredEmployeeList}
         columns={columns}
         autoHeight
         pagination
@@ -63,7 +65,7 @@ function DataTable() {
             <TablePagination
               page={page}
               pageCount={10}
-              totalCount={employeeList.length}
+              totalCount={(employeeList && employeeList.length) || 0}
               onChange={handlePagination}
             />
           ),
